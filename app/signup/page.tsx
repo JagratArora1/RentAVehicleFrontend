@@ -149,7 +149,7 @@ export default function SignupPage() {
                     transition={{ duration: 2.5, ease: "easeInOut" }}
                     className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full flex items-center justify-start"
                   >
-                    🚗💨
+                    <div className="emote">🚗💨</div>
                   </motion.div>
                 </>
               )}
