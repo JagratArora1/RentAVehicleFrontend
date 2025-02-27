@@ -4,8 +4,8 @@ import React from "react";
 import PageWrapper from "@/components/PageWrapper";
 
 const xuvVehicles = [
-  { id: 1, name: "Mahindra XUV700", image: "/vehicles/xuv1.jpg", pricePerDay: "₹2500/day" },
-  { id: 2, name: "Tata Harrier", image: "/vehicles/xuv2.jpg", pricePerDay: "₹2300/day" },
+  { id: 1, name: "Tata Harrier", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Tata+Harrier.jpg", pricePerDay: "₹9000/day" },
+  { id: 2, name: "Kia Seltos", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Kia+Seltos.jpg", pricePerDay: "₹7500/day" },
 ];
 
 export default function XUVPage() {

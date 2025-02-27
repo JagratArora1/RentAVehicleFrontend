@@ -4,8 +4,8 @@ import React from "react";
 import PageWrapper from "@/components/PageWrapper";
 
 const hatchbackVehicles = [
-  { id: 1, name: "Maruti Swift", image: "/vehicles/hatchback1.jpg", pricePerDay: "₹1400/day" },
-  { id: 2, name: "Hyundai i20", image: "/vehicles/hatchback2.jpg", pricePerDay: "₹1350/day" },
+  { id: 1, name: "Maruti Suzuki", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/marutisuzuki.jpg", pricePerDay: "₹1800/day" },
+  { id: 2, name: "Hyundai Grand i10", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Hyundai+Grand+i10.jpg", pricePerDay: "₹2500/day" },
 ];
 
 export default function HatchbackPage() {

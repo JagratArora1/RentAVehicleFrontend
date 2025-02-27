@@ -4,8 +4,8 @@ import React from "react";
 import PageWrapper from "@/components/PageWrapper";
 
 const sedanVehicles = [
-  { id: 1, name: "Honda City", image: "/vehicles/sedan1.jpg", pricePerDay: "₹1800/day" },
-  { id: 2, name: "Hyundai Verna", image: "/vehicles/sedan2.jpg", pricePerDay: "₹1700/day" },
+  { id: 1, name: "Honda City", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Honda+City.jpg", pricePerDay: "₹4500/day" },
+  { id: 2, name: "Toyota Camry", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Toyota+Camry.jpg", pricePerDay: "₹6000/day" },
 ];
 
 export default function SedanPage() {
