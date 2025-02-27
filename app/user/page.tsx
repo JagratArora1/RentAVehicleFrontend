@@ -27,7 +27,7 @@ const vehicles: Record<string, Vehicle[]> = {
   premium: [
     { name: "Mercedes S-Class", price: "$150/day", img: "/logo.jpg" },
     { name: "BMW 7 Series", price: "$140/day", img: "/logo.jpg" },
-    { name: "Audi A8", price: "$130/day", img: "/logo.jpg" },
+    { name: "Audi A8", price: "$130/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Audi+A4.jpg" },
   ],
   affordable: [
     { name: "Toyota Corolla", price: "$50/day", img: "/logo.jpg" },

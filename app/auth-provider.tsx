@@ -41,7 +41,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
 
-    const publicPages = ["/home", "/login", "/signup", "/about-us", "/contact","bookings","profile","terms"];
+    const publicPages = ["/home", "/login", "/signup", "/about-us", "/contact","/bookings","/profile","/terms"];
 
     if (!token && !publicPages.includes(pathname)) {
       router.replace("/home");
