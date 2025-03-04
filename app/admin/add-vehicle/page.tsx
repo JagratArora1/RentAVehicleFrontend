@@ -171,7 +171,7 @@ export default function AddVehiclePage() {
           {/* Upload Documents */}
           <div className="space-y-3">
             <Label>Upload Documents</Label>
-            {["Driving License", "Registration Certificate", "Insurance Policy", "PUC Certificate", "ID Proof"].map((doc) => (
+            {["Driving License", "Registration Certificate", "Insurance Policy", "PUC Certificate", "ID Proof","Vehicle Image"].map((doc) => (
               <div key={doc} className="flex items-center space-x-3">
                 <Button variant="outline">
                   <Upload className="mr-2 h-5 w-5" />
