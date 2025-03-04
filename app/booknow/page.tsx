@@ -338,24 +338,6 @@ export default function BookNowPage() {
       }
     }
   }, [startDate, endDate, pricePerDay]);
-  
-  //   const handleCheckout = async () => {
-//     if (!startDate || !endDate) {
-//       alert("Please select start and end dates.");
-//       return;
-//     }
-
-//     setLoading(true);
-
-//     const response = await fetch("/api/checkout", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         name,
-//         image,
-//         totalPrice,
-//       }),
-//     });
   const makePayment = async () => {
     const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
       const response = await fetch("/api/checkout", {

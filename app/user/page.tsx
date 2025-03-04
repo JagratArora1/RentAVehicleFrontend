@@ -156,9 +156,20 @@ export default function UserDashboard() {
               <CardContent>
                 <img src={vehicle.img} alt={vehicle.name} className="rounded-lg mb-2 w-full h-40 object-cover" />
                 <p className="text-gray-700">{vehicle.price}</p>
-                <Button variant="default" className="mt-2 w-full">
-                  Book Now
-                </Button>
+                  <Link
+                    href={{
+                      pathname: "/booknow",
+                      query: {
+                        name: vehicle.name,
+                        image: vehicle.img,
+                        price: vehicle.price.replace("₹", "").replace("/day", ""), // Clean price
+                      },
+                    }}
+                >
+                  <Button variant="default" className="mt-2 w-full">
+                    Book Now
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ))}
