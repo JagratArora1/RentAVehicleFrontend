@@ -441,7 +441,7 @@ export default function UserProfile() {
   const handleSaveProfile = () => {
     // Simulating saving data
     setTimeout(() => {
-      router.push("/user/page.tsx"); // Redirect after saving
+      router.push("/user"); // Redirect after saving
     }, 1000);
   };
 
