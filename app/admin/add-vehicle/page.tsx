@@ -1,33 +1,104 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-// import { Textarea } from "@/components/ui/textarea";
-import { Upload } from "lucide-react";
 import { motion } from "framer-motion";
 
-
 export default function AddVehiclePage() {
+  const router = useRouter();
   const [vehicleType, setVehicleType] = useState("");
   const [subCategory, setSubCategory] = useState("");
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [vehicleId, setVehicleId] = useState<any>();
+  useEffect(() => {
+    const id = localStorage.getItem("userId");
+    setUserId(id || null);
+
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken || null);
+  }, []);
+  const [formData, setFormData] = useState({
+    modelName: "",
+    vehicleNumber: "",
+    kilometersDriven: "",
+    fuelType: "",
+    status: "",
+    pricePerDay: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const twoWheelerOptions = ["E-Scooty", "Scooty", "Sports Bike", "Bike"];
   const fourWheelerOptions = ["Sedan", "XUV", "Hatchback", "Premium"];
-  const [files, setFiles] = useState<{ [key: string]: File | null }>({});
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, doc: string) => {
-    const selectedFile = event.target.files?.[0]; // Safe access with optional chaining
-    if (selectedFile) {
-      setFiles((prevFiles) => ({
-        ...prevFiles,
-        [doc]: selectedFile,
-      }));
+  // Handle input field changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setMessage("");
+
+    if (!vehicleType || !subCategory || !formData.modelName || !formData.vehicleNumber || !formData.pricePerDay) {
+      setMessage("Please fill all required fields.");
+      setLoading(false);
+      return;
+    }
+
+    const vehicleData = {
+      vehicleNo: formData.vehicleNumber,
+      modelName: formData.modelName,
+      kilometerDriven: formData.kilometersDriven ? parseInt(formData.kilometersDriven) : 0, // Ensure valid number
+      fuelType: formData.fuelType,
+      vehicleType: vehicleType,
+      category: subCategory,
+      status: formData.status || "available", // Default value
+      pricePerDay: formData.pricePerDay ? parseFloat(formData.pricePerDay) : 0.0, // Ensure valid number
+    };
+
+    console.log("Sending JSON:", JSON.stringify(vehicleData));
+
+    try {
+      const response = await fetch("http://localhost:2237/vehicles/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(vehicleData),
+      });
+
+      console.log("Response:", response);
+      // setVehicleId(response.vehicleId);
+
+      if (response.ok) {
+        setMessage("Vehicle added successfully!");
+        setTimeout(() => {
+          router.push(`../admin/upload-documents?vehicleId=${15}`);
+        }, 2000);
+
+      } else {
+        const result = await response.json();
+        setMessage(result || "Failed to add vehicle. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error adding vehicle:", error);
+      setMessage("Error adding vehicle.");
+    } finally {
+      setLoading(false);
     }
   };
+
+
   return (
     <motion.div
       className="max-w-4xl mx-auto p-6 space-y-6"
@@ -55,58 +126,40 @@ export default function AddVehiclePage() {
               </Select>
             </div>
 
-            {/* Subcategories based on selection */}
             <div>
-                <Label>Subcategory</Label>
-                <Select value={subCategory} onValueChange={setSubCategory} disabled={!vehicleType}>
-                    <SelectTrigger>
-                    <SelectValue placeholder="Select Subcategory" />
-                    </SelectTrigger>
-                    <SelectContent>
-                    {(vehicleType === "2-wheeler" ? twoWheelerOptions : fourWheelerOptions).map((option) => (
-                        <SelectItem key={option} value={option}>
-                        {option}
-                        </SelectItem>
-                    ))}
-                    </SelectContent>
-                </Select>
-                </div>
-
+              <Label>Subcategory</Label>
+              <Select value={subCategory} onValueChange={setSubCategory} disabled={!vehicleType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Subcategory" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(vehicleType === "2-wheeler" ? twoWheelerOptions : fourWheelerOptions).map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {/* Other Vehicle Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label>Model Name</Label>
-              <Input type="text" placeholder="Enter model name" />
+              <Input name="modelName" type="text" placeholder="Enter model name" onChange={handleChange} />
             </div>
             <div>
               <Label>Vehicle Number</Label>
-              <Input type="text" placeholder="Enter vehicle number" />
+              <Input name="vehicleNumber" type="text" placeholder="Enter vehicle number" onChange={handleChange} />
             </div>
-            {/* <div>
-              <Label>Owner Name</Label>
-              <Input type="text" placeholder="Enter owner name" />
-            </div> */}
-            {/* <div>
-              <Label>Chassis Number</Label>
-              <Input type="text" placeholder="Enter chassis number" />
-            </div>
-            <div>
-              <Label>Engine Number</Label>
-              <Input type="text" placeholder="Enter engine number" />
-            </div>
-            <div>
-              <Label>Registration Date</Label>
-              <Input type="date" />
-            </div> */}
             <div>
               <Label>Kilometers Driven</Label>
-              <Input type="text" placeholder="Enter km driven" />
+              <Input name="kilometersDriven" type="text" placeholder="Enter km driven" onChange={handleChange} />
             </div>
             <div>
               <Label>Fuel Type</Label>
-              <Select>
+              <Select onValueChange={(value) => setFormData({ ...formData, fuelType: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Fuel Type" />
                 </SelectTrigger>
@@ -119,49 +172,9 @@ export default function AddVehiclePage() {
                 </SelectContent>
               </Select>
             </div>
-            {/* <div>
-              <Label>Financier Name</Label>
-              <Input type="text" placeholder="Enter financier name" />
-            </div>
-            <div>
-              <Label>Insurance Company</Label>
-              <Input type="text" placeholder="Enter insurance company" />
-            </div> */}
-            {/* <div>
-              <Label>Insurance Policy Number</Label>
-              <Input type="text" placeholder="Enter policy number" />
-            </div> */}
-            {/* <div>
-              <Label>Insurance Valid Upto</Label>
-              <Input type="date" />
-            </div> */}
-            {/* <div>
-              <Label>Fitness Valid Upto</Label>
-              <Input type="date" />
-            </div> */}
-            {/* <div>
-              <Label>PUC Certificate Number</Label>
-              <Input type="text" placeholder="Enter PUC number" />
-            </div> */}
-            {/* <div>
-              <Label>PUC Valid Upto</Label>
-              <Input type="date" />
-            </div> */}
-            {/* <div>
-              <Label>Registering Authority</Label>
-              <Input type="text" placeholder="Enter registering authority" />
-            </div> */}
-            {/* <div>
-              <Label>Mileage</Label>
-              <Input type="text" placeholder="Enter mileage" />
-            </div> */}
-            {/* <div>
-              <Label>Vehicle Service History</Label>
-              <Textarea placeholder="Enter service history" />
-            </div> */}
             <div>
               <Label>Status</Label>
-              <Select>
+              <Select onValueChange={(value) => setFormData({ ...formData, status: value })}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Status" />
                 </SelectTrigger>
@@ -174,48 +187,22 @@ export default function AddVehiclePage() {
             </div>
             <div>
               <Label>Price Per Day</Label>
-              <Input type="text" placeholder="Enter price per day" />
+              <Input name="pricePerDay" type="text" placeholder="Enter price per day" onChange={handleChange} />
             </div>
           </div>
 
-          {/* Upload Documents */}
-          {/* <div className="space-y-3">
-            <Label>Upload Documents</Label>
-            {["Driving License", "Registration Certificate", "Insurance Policy", "PUC Certificate", "ID Proof","Vehicle Image"].map((doc) => (
-              <div key={doc} className="flex items-center space-x-3">
-                <Button variant="outline">
-                  <Upload className="mr-2 h-5 w-5" />
-                  Upload {doc}
-                </Button>
-              </div>
-            ))}
-          </div> */}
-          <div className="space-y-3">
-      <Label>Upload Documents</Label>
-      {["Driving License", "Registration Certificate", "Insurance Policy", "PUC Certificate", "ID Proof", "Vehicle Image"].map((doc) => (
-        <div key={doc} className="flex items-center space-x-3">
-          <label htmlFor={doc} className="flex items-center space-x-2">
-            <Button variant="outline" asChild>
-              <label htmlFor={doc} className="cursor-pointer flex items-center">
-                <Upload className="mr-2 h-5 w-5" />
-                Upload {doc}
-              </label>
-            </Button>
-            <Input
-              id={doc}
-              type="file"
-              className="hidden"
-              onChange={(e) => handleFileChange(e, doc)}
-            />
-          </label>
-          {files[doc] && <span className="text-sm text-green-600">{files[doc]?.name}</span>}
-        </div>
-      ))}
-    </div>
+          {/* Status Message */}
+          {message && (
+            <p className={`text-center font-semibold ${message.includes("success") ? "text-green-600" : "text-red-600"}`}>
+              {message}
+            </p>
+          )}
 
-          {/* Submit Button */}
+          {/* Save Changes Button */}
           <div className="flex justify-end">
-            <Button className="bg-blue-600 hover:bg-blue-700">Submit Vehicle</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700" onClick={handleSubmit} disabled={loading}>
+              {loading ? "Saving..." : "Save Changes"}
+            </Button>
           </div>
         </CardContent>
       </Card>

@@ -21,7 +21,7 @@
 //     if (startDate && endDate) {
 //       const start = new Date(startDate);
 //       const end = new Date(endDate);
-  
+
 //       // Ensure valid dates
 //       if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
 //         const days = Math.max(Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1, 1);
@@ -31,7 +31,7 @@
 //       }
 //     }
 //   }, [startDate, endDate, pricePerDay]);
-  
+
 
 //   return (
 //     <div className="max-w-4xl mx-auto p-6 flex flex-col md:flex-row gap-6">
@@ -310,7 +310,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe } from "@stripe/stripe-js";
+import { apiRequest } from "@/app/apiconnect/api";
 
 export default function BookNowPage() {
   const searchParams = useSearchParams();
@@ -324,11 +325,22 @@ export default function BookNowPage() {
   const [endDate, setEndDate] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = localStorage.getItem("userId");
+    setUserId(id || null);
+
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken || null);
+  }, []);
+
   useEffect(() => {
     if (startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
-  
+
       // Ensure valid dates
       if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
         const days = Math.max(Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1, 1);
@@ -338,23 +350,96 @@ export default function BookNowPage() {
       }
     }
   }, [startDate, endDate, pricePerDay]);
+
   const makePayment = async () => {
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
-      const response = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        image,
-        totalPrice,
-      }),
-    });
-    const session = await response.json();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const result=stripe?.redirectToCheckout({
-      sessionId:session.id
-    })
-  }
+    try {
+      if (!startDate || !endDate) {
+        alert("Please select start and end dates.");
+        return;
+      }
+
+      if (!userId || !token) {
+        alert("User not authenticated. Please log in.");
+        return;
+      }
+
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
+
+      const checkoutResponse = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          totalPrice,
+        }),
+      });
+
+      if (!checkoutResponse.ok) {
+        throw new Error(`Failed to create Stripe session: ${checkoutResponse.statusText}`);
+      }
+
+      const session = await checkoutResponse.json();
+      console.log("Stripe Session:", session);
+
+      // Redirect to Stripe Checkout
+      const result = await stripe?.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result?.error) {
+        console.error("Stripe Error:", result.error.message);
+        return;
+      }
+
+      // ✅ After Stripe payment success, store booking in the database
+      await saveBooking();
+
+    } catch (error) {
+      console.error("Payment or Booking Error:", error);
+    }
+  };
+
+  const saveBooking = async () => {
+    try {
+      const bookingData = {
+        customer: {
+          customerId: userId,
+        },
+        vehicle: {
+          vehicleId: 1, // 🚨 Replace with the actual vehicle ID
+        },
+        startDate,
+        endDate,
+        totalPrice: totalPrice.toString(),
+        status: "success",
+      };
+
+      console.log("Sending Booking Data:", bookingData);
+
+      const bookingResponse = await fetch("http://localhost:2237/bookings/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (!bookingResponse.ok) {
+        throw new Error("Booking API call failed.");
+      }
+
+      const bookingResult = await bookingResponse.json();
+      console.log("Booking Response JSON:", bookingResult);
+      alert("Booking successful!");
+
+    } catch (error) {
+      console.error("Booking Error:", error);
+      alert("Booking failed.");
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 flex flex-col md:flex-row gap-6">
       {/* Left: Vehicle Image */}

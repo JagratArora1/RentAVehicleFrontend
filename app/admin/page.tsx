@@ -310,7 +310,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, PlusCircle, BarChart, Star, ExternalLink, Users, Car, DollarSign } from "lucide-react";
+import { LogOut, LayoutDashboard, PlusCircle, BarChart, Star, ExternalLink, Users, Car, DollarSign, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -370,6 +370,7 @@ export default function AdminDashboard() {
     { label: "Add a New Vehicle", icon: PlusCircle, path: "/admin/add-vehicle" },
     { label: "Revenue P&L", icon: BarChart, path: "/admin/revenue" },
     { label: "Vehicle Reviews", icon: Star, path: "/admin/reviews" },
+    { label: "Users", icon: User, path: "/admin/users" },
     { label: "Crisp Dashboard", icon: ExternalLink, path: "https://app.crisp.chat/" },
   ];
 

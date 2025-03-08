@@ -272,7 +272,7 @@ export default function SignupPage() {
       localStorage.setItem("role", role);
       setIsLoading(false);
       toast.success(`${role === "admin" ? "Admin" : "User"} signup successful!`);
-      router.replace(role === "admin" ? "/admin" : "/user");
+      router.replace(role === "admin" ? "/admin" : "/login");
     }, 3500);
   };
 

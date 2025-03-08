@@ -228,6 +228,7 @@ export default function LoginPage() {
       if (data.status == "success") {
 
         // Assuming your backend returns a field called "token" or "message" with the JWT
+        localStorage.setItem("userId",data.userId);
         localStorage.setItem("token", data.token || data.message);
         localStorage.setItem("role", role);
 
