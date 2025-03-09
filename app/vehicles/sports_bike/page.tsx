@@ -241,6 +241,7 @@ export default function SportsBikePage() {
     const getVehiclesWithImages = async () => {
       try {
         const res = await apiRequest("vehicles/category/sports_bike", "GET");
+        console.log(res);
         setVehicles(res);
 
        

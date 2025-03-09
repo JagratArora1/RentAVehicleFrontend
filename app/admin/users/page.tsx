@@ -37,6 +37,8 @@ export default function UserDetails() {
         fetchAllUsers();
     }, []);
 
+    console.log(users);
+
     return (
         <Card className="max-w-5xl mx-auto p-4">
             <CardHeader>
