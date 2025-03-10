@@ -90,7 +90,7 @@ export default function UploadDocumentsPage() {
                         />
                     </div>
 
-                    {["Driving License", "Registration Certificate", "Insurance Policy", "PUC Certificate", "ID Proof", "Vehicle Image"].map((doc) => (
+                    {["Driving License", "RC", "Insurance Policy", "PUC Certificate", "ID Proof", "Vehicle Image"].map((doc) => (
                         <div key={doc} className="flex items-center space-x-3">
                             <label htmlFor={doc} className="flex items-center space-x-2">
                                 <Button variant="outline" asChild>

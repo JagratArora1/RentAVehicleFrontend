@@ -10,8 +10,18 @@ interface User {
     email: string;
     address?: string | null;
     role?: string | null;
-    createdAt: string;
+    createdAt: number[];
 }
+
+// Function to format createdAt array into a date string
+const formatDate = (dateArray: number[] | string): string => {
+    if (Array.isArray(dateArray) && dateArray.length >= 3) {
+        const [year, month, day, hour = 0, minute = 0, second = 0] = dateArray;
+        return new Date(year, month - 1, day, hour, minute, second).toLocaleString();
+    }
+    return "N/A"; // Default if the date is not valid
+};
+
 
 export default function UserDetails() {
     const [users, setUsers] = useState<User[]>([]);
@@ -67,7 +77,7 @@ export default function UserDetails() {
                                     <TableCell>{user.email}</TableCell>
                                     <TableCell>{user.address || "N/A"}</TableCell>
                                     <TableCell>{user.role || "N/A"}</TableCell>
-                                    <TableCell>{new Date(user.createdAt).toLocaleString()}</TableCell>
+                                    <TableCell>{formatDate(user.createdAt)}</TableCell>
                                 </TableRow>
                             ))
                         ) : (

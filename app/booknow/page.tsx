@@ -312,6 +312,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { loadStripe } from "@stripe/stripe-js";
 import { apiRequest } from "@/app/apiconnect/api";
+import toast from "react-hot-toast";
 
 export default function BookNowPage() {
   const searchParams = useSearchParams();
@@ -319,6 +320,7 @@ export default function BookNowPage() {
   // Extract details from query params
   const name = searchParams.get("name") || "Unknown Vehicle";
   const image = searchParams.get("image") || "";
+  const vehicleId = searchParams.get("vehicleId") || "";
   const pricePerDay = Number(searchParams.get("price")) || 0;
 
   const [startDate, setStartDate] = useState("");
@@ -346,7 +348,7 @@ export default function BookNowPage() {
         const days = Math.max(Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1, 1);
         setTotalPrice(days * pricePerDay);
       } else {
-        setTotalPrice(0); // Reset if invalid date
+        setTotalPrice(0);
       }
     }
   }, [startDate, endDate, pricePerDay]);
@@ -362,6 +364,23 @@ export default function BookNowPage() {
         alert("User not authenticated. Please log in.");
         return;
       }
+      const bookdata = [
+        {
+          "customer": {
+            "userId": userId
+          },
+          "vehicle": {
+            "vehicleId": vehicleId
+          },
+          "startDate": startDate,
+          "endDate": endDate,
+          "totalPrice": totalPrice,
+          "status": "success"
+        }
+
+      ]
+
+      localStorage.setItem("bookdata", JSON.stringify(bookdata));
 
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string);
 
@@ -386,59 +405,20 @@ export default function BookNowPage() {
         sessionId: session.id,
       });
 
+
+      console.log(result);
+
       if (result?.error) {
         console.error("Stripe Error:", result.error.message);
         return;
       }
-
-      // ✅ After Stripe payment success, store booking in the database
-      await saveBooking();
 
     } catch (error) {
       console.error("Payment or Booking Error:", error);
     }
   };
 
-  const saveBooking = async () => {
-    try {
-      const bookingData = {
-        customer: {
-          customerId: userId,
-        },
-        vehicle: {
-          vehicleId: 1, // 🚨 Replace with the actual vehicle ID
-        },
-        startDate,
-        endDate,
-        totalPrice: totalPrice.toString(),
-        status: "success",
-      };
 
-      console.log("Sending Booking Data:", bookingData);
-
-      const bookingResponse = await fetch("http://localhost:2237/bookings/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-          "Accept": "application/json",
-        },
-        body: JSON.stringify(bookingData),
-      });
-
-      if (!bookingResponse.ok) {
-        throw new Error("Booking API call failed.");
-      }
-
-      const bookingResult = await bookingResponse.json();
-      console.log("Booking Response JSON:", bookingResult);
-      alert("Booking successful!");
-
-    } catch (error) {
-      console.error("Booking Error:", error);
-      alert("Booking failed.");
-    }
-  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 flex flex-col md:flex-row gap-6">
