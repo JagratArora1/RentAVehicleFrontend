@@ -35,7 +35,7 @@ export default function AddVehiclePage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const twoWheelerOptions = ["E-Scooty", "Scooty", "Sports Bike", "Bike"];
+  const twoWheelerOptions = ["E_Scooty", "Scooty", "Sports_Bike", "Bike"];
   const fourWheelerOptions = ["Sedan", "XUV", "Hatchback", "Premium"];
 
   // Handle input field changes
