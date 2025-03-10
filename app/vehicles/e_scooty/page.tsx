@@ -320,6 +320,7 @@ export default function EScootyPage() {
                       name: vehicle.modelName,
                       image: imageMap[vehicle.vehicleId] || "",
                       price: vehicle.pricePerDay.toString(),
+                      vehicleId:vehicle.vehicleId
                     },
                   }}
                 >

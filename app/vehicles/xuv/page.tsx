@@ -334,6 +334,7 @@ export default function XUVPage() {
                       name: vehicle.modelName,
                       image: imageMap[vehicle.vehicleId] || "",
                       price: vehicle.pricePerDay.toString(),
+                      vehicleId:vehicle.vehicleId
                     },
                   }}
                 >
