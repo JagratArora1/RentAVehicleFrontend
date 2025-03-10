@@ -267,17 +267,21 @@ export default function XUVPage() {
        
         const imageRequests = res.map(async (vehicle: any) => {
           const res2 = await apiRequest(`admin/vehicle-documents/vehicle/${vehicle.vehicleId}`, "GET");
-          console.log(`Documents for Vehicle `, res2);
+          console.log(`Documents for Vehicle:`, res2);
 
           if (Array.isArray(res2)) {
             const imageDoc = res2.find(doc => doc.documentType === "VEHICLE_IMAGE"); 
             return { vehicleId: vehicle.vehicleId, imageUrl: imageDoc ? imageDoc.filePath : "" };
           }
+          console.log(vehicle);
           return { vehicleId: vehicle.vehicleId, imageUrl: "" };
         });
 
         // Resolve all image requests
         const images = await Promise.all(imageRequests);
+        console.log(imageRequests
+
+        );
 
         // Store images in a map
         const imageMapData: { [key: number]: string } = {};
