@@ -86,7 +86,7 @@ export default function UserDashboard() {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src="/user-avatar.png" alt="User" />
+          <AvatarImage src="/avatar.jpg" alt="User" />
           <AvatarFallback>U</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

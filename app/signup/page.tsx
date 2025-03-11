@@ -1,9 +1,193 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
+// // "use client";
+
+// // import { useState, useEffect, useRef } from "react";
+// // import { useRouter, useSearchParams } from "next/navigation";
+// // import { CheckCircleIcon, XCircleIcon, MailIcon, PhoneIcon, LockIcon, UserIcon } from "lucide-react";
+// // import { motion } from "framer-motion";
+// // import ReCAPTCHA from "react-google-recaptcha";
+// // import toast from "react-hot-toast";
+
+// // export default function SignupPage() {
+// //   const router = useRouter();
+// //   const searchParams = useSearchParams();
+// //   const role = searchParams.get("role") || "user";
+
+// //   const recaptchaRef = useRef<ReCAPTCHA>(null);
+// //   const [formData, setFormData] = useState({
+// //     username: "",
+// //     email: "",
+// //     mobile: "",
+// //     password: "",
+// //     confirmPassword: "",
+// //   });
+
+// //   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+// //   const [isLoading, setIsLoading] = useState(false);
+// //   const passwordsMatch = formData.password && formData.password === formData.confirmPassword;
+
+// //   useEffect(() => {
+// //     document.title = role === "admin" ? "Admin Signup" : "User Signup";
+// //   }, [role]);
+
+// //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+// //     setFormData({ ...formData, [e.target.name]: e.target.value });
+// //   };
+
+// //   const handleCaptchaChange = (token: string | null) => {
+// //     setCaptchaToken(token);
+// //   };
+
+// //   const handleSubmit = async (e: React.FormEvent) => {
+// //     e.preventDefault();
+// //     if (!passwordsMatch) {
+// //       toast.error("Passwords do not match!");
+// //       return;
+// //     }
+
+// //     if (!captchaToken) {
+// //       toast.error("Please verify the reCAPTCHA!");
+// //       return;
+// //     }
+
+// //     setIsLoading(true);
+
+// //     setTimeout(() => {
+// //       localStorage.setItem("token", "mocked_jwt_token");
+// //       localStorage.setItem("role", role);
+// //       setIsLoading(false);
+// //       toast.success(`${role === "admin" ? "Admin" : "User"} signup successful!`);
+// //       router.replace(role === "admin" ? "/admin" : "/user");
+// //     }, 3500);
+// //   };
+
+// //   return (
+// //     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-blue-500 to-purple-800">
+// //       <motion.form
+// //         onSubmit={handleSubmit}
+// //         initial={{ opacity: 0, scale: 0.9 }}
+// //         animate={{ opacity: 1, scale: 1 }}
+// //         transition={{ duration: 0.6, ease: "easeOut" }}
+// //         className="relative z-10 p-8 bg-white/50 backdrop-blur-xl shadow-2xl rounded-xl w-full max-w-xl"
+// //       >
+// //         <motion.h1
+// //           initial={{ y: -20, opacity: 0 }}
+// //           animate={{ y: 0, opacity: 1 }}
+// //           transition={{ delay: 0.3 }}
+// //           className="text-4xl font-extrabold mb-6 text-center text-purple-700"
+// //         >
+// //           {role === "admin" ? "Admin Signup" : "User Signup"}
+// //         </motion.h1>
+
+// //         <div className="space-y-4">
+// //           {[
+// //             { name: "username", icon: UserIcon, placeholder: "Full Name" },
+// //             { name: "email", icon: MailIcon, placeholder: "Email" },
+// //             { name: "mobile", icon: PhoneIcon, placeholder: "Mobile Number" },
+// //             { name: "password", icon: LockIcon, placeholder: "Create Password" },
+// //             { name: "confirmPassword", icon: LockIcon, placeholder: "Confirm Password" },
+// //           ].map((field, index) => (
+// //             <motion.div
+// //               key={field.name}
+// //               initial={{ opacity: 0, y: 20 }}
+// //               animate={{ opacity: 1, y: 0 }}
+// //               transition={{ delay: 0.2 + index * 0.1 }}
+// //               className="relative"
+// //             >
+// //               <field.icon className="absolute left-3 top-3 text-gray-500" size={20} />
+// //               <input
+// //                 type={field.name.includes("password") ? "password" : "text"}
+// //                 name={field.name}
+// //                 placeholder={field.placeholder}
+// //                 value={formData[field.name as keyof typeof formData]}
+// //                 onChange={handleChange}
+// //                 className="w-full p-3 pl-10 border rounded-lg focus:ring-2 focus:ring-purple-500"
+// //                 required
+// //               />
+// //               {field.name === "confirmPassword" && formData.confirmPassword && (
+// //                 <span className="absolute inset-y-0 right-3 flex items-center">
+// //                   {passwordsMatch ? (
+// //                     <CheckCircleIcon className="text-green-500" size={24} />
+// //                   ) : (
+// //                     <XCircleIcon className="text-red-500" size={24} />
+// //                   )}
+// //                 </span>
+// //               )}
+// //             </motion.div>
+// //           ))}
+
+// //           {/* reCAPTCHA Field */}
+// //           <motion.div
+// //             initial={{ opacity: 0 }}
+// //             animate={{ opacity: 1 }}
+// //             transition={{ delay: 0.8 }}
+// //             className="flex justify-center mt-4"
+// //           >
+// //             <ReCAPTCHA
+// //               ref={recaptchaRef}
+// //               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+// //               onChange={handleCaptchaChange}
+// //             />
+// //           </motion.div>
+
+// //           {/* Signup Button with Car Animation */}
+// //           <motion.div className="relative mt-6">
+// //             <motion.button
+// //               type="submit"
+// //               whileHover={{ scale: 1.05 }}
+// //               whileTap={{ scale: 0.95 }}
+// //               disabled={isLoading}
+// //               className="w-full bg-purple-700 text-white p-3 rounded-lg min-h-[50px] relative overflow-hidden"
+// //             >
+// //               {!isLoading ? (
+// //                 "Sign Up"
+// //               ) : (
+// //                 <>
+// //                   <motion.div
+// //                     initial={{ x: "-100%" }}
+// //                     animate={{ x: "100%" }}
+// //                     exit={{ opacity: 0 }}
+// //                     transition={{ duration: 2.5, ease: "easeInOut" }}
+// //                     className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full flex items-center justify-start"
+// //                   >
+// //                     <div className="emote">🚗💨</div>
+// //                   </motion.div>
+// //                 </>
+// //               )}
+// //             </motion.button>
+
+// //             {isLoading && (
+// //               <motion.div
+// //                 initial={{ scale: 0 }}
+// //                 animate={{ scale: 1 }}
+// //                 transition={{ delay: 2.5 }}
+// //                 className="flex justify-center mt-2 text-green-600"
+// //               >
+// //                 ✅ Signup Successful!
+// //               </motion.div>
+// //             )}
+// //           </motion.div>
+
+// //           <p className="mt-4 text-center text-gray-700">
+// //             Already have an account?{" "}
+// //             <span
+// //               className="text-purple-600 cursor-pointer underline"
+// //               onClick={() => router.push(`/login?role=${role}`)}
+// //             >
+// //               Log in
+// //             </span>
+// //           </p>
+// //         </div>
+// //       </motion.form>
+// //     </div>
+// //   );
+// // }
+
 // "use client";
 
 // import { useState, useEffect, useRef } from "react";
 // import { useRouter, useSearchParams } from "next/navigation";
-// import { CheckCircleIcon, XCircleIcon, MailIcon, PhoneIcon, LockIcon, UserIcon } from "lucide-react";
+// import { CheckCircleIcon, XCircleIcon, MailIcon, PhoneIcon, LockIcon, UserIcon, HomeIcon } from "lucide-react";
 // import { motion } from "framer-motion";
 // import ReCAPTCHA from "react-google-recaptcha";
 // import toast from "react-hot-toast";
@@ -20,6 +204,7 @@
 //     mobile: "",
 //     password: "",
 //     confirmPassword: "",
+//     address: ""
 //   });
 
 //   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -29,6 +214,7 @@
 //   useEffect(() => {
 //     document.title = role === "admin" ? "Admin Signup" : "User Signup";
 //   }, [role]);
+
 
 //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 //     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -51,13 +237,42 @@
 //     }
 
 //     setIsLoading(true);
+//     try {
+//       const res = await fetch("http://localhost:2237/auth/signup",
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({
+//             fullName: formData.username,
+//             email: formData.email,
+//             passwordHash: formData.password,
+//             contactNumber: formData.mobile,
+//             address: formData.address,
+//             role: "Customer"
+
+//           })
+//         }
+//       )
+//       const data = await res.json();
+//       if (data.status == "success") {
+//         toast.success(data.message);
+//       }
+//       else {
+//         toast.error(data.message)
+//       }
+//       console.log(data);
+//     } catch (error: any) {
+//       toast.error(error);
+//     }
 
 //     setTimeout(() => {
 //       localStorage.setItem("token", "mocked_jwt_token");
 //       localStorage.setItem("role", role);
 //       setIsLoading(false);
 //       toast.success(`${role === "admin" ? "Admin" : "User"} signup successful!`);
-//       router.replace(role === "admin" ? "/admin" : "/user");
+//       router.replace(role === "admin" ? "/admin" : "/login");
 //     }, 3500);
 //   };
 
@@ -86,6 +301,9 @@
 //             { name: "mobile", icon: PhoneIcon, placeholder: "Mobile Number" },
 //             { name: "password", icon: LockIcon, placeholder: "Create Password" },
 //             { name: "confirmPassword", icon: LockIcon, placeholder: "Confirm Password" },
+//             { name: "address", icon: HomeIcon, placeholder: "Address..." }
+
+
 //           ].map((field, index) => (
 //             <motion.div
 //               key={field.name}
@@ -191,12 +409,36 @@ import { CheckCircleIcon, XCircleIcon, MailIcon, PhoneIcon, LockIcon, UserIcon, 
 import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
+// const ROWS = 5;
+// const COLS = 4; // Fixed to a 5x5 grid for better alignment
+// const TOTAL_IMAGES = 20;
+// const generateAnimation = () => ({
+//   scale: [1, 1.1, 1],
+//   opacity: [0.7, 1, 0.7],
+//   y: [0, -10, 10, 0],
+//   transition: {
+//     duration: 3 + Math.random() * 2,
+//     repeat: Infinity,
+//     ease: "easeInOut",
+//   },
+// });
+const isValidEmail = (email: string) => /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+const isValidMobile = (mobile: string) => /^[0-9]{10}$/.test(mobile);
+const isStrongPassword = (password: string) =>
+  /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(password);
+const isValidAddress = (address: string) => address.trim().length >= 5;
 export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "user";
-
+  // const [images, setImages] = useState<string[] | null>(null);
+  
+    // useEffect(() => {
+    //   const imagePaths = Array.from({ length: TOTAL_IMAGES }, (_, i) => `/images/bike${i + 1}.jpg`);
+    //   setImages(imagePaths);
+    // }, []);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [formData, setFormData] = useState({
     username: "",
@@ -223,14 +465,46 @@ export default function SignupPage() {
   const handleCaptchaChange = (token: string | null) => {
     setCaptchaToken(token);
   };
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
+  const formFields = [
+    { name: "username", icon: UserIcon, placeholder: "Full Name" },
+    { name: "email", icon: MailIcon, placeholder: "Email" },
+    { name: "mobile", icon: PhoneIcon, placeholder: "Mobile Number" },
+    { name: "password", icon: LockIcon, placeholder: "Create Password", isPassword: true },
+    { name: "confirmPassword", icon: LockIcon, placeholder: "Confirm Password", isPassword: true },
+    { name: "address", icon: HomeIcon, placeholder: "Address..." },
+  ];
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!passwordsMatch) {
-      toast.error("Passwords do not match!");
-      return;
+    // if (!passwordsMatch) {
+    //   toast.error("Passwords do not match!");
+    //   return;
+    // }
+    if (!formData.username.trim()) {
+      return toast.error("Please enter your full name.");
     }
-
+    if (!isValidEmail(formData.email)) {
+      return toast.error("Invalid email format.");
+    }
+    if (!isValidMobile(formData.mobile)) {
+      return toast.error("Mobile number must be 10 digits.");
+    }
+    if (!isStrongPassword(formData.password)) {
+      return toast.error("Password must be at least 8 characters long, include an uppercase letter, a number, and a special character.");
+    }
+    if (!passwordsMatch) {
+      return toast.error("Passwords do not match!");
+    }
+    if (!isValidAddress(formData.address)) {
+      return toast.error("Address must be at least 5 characters long.");
+    }
+    if (!captchaToken) {
+      return toast.error("Please verify the reCAPTCHA!");
+    }
     if (!captchaToken) {
       toast.error("Please verify the reCAPTCHA!");
       return;
@@ -258,15 +532,18 @@ export default function SignupPage() {
       const data = await res.json();
       if (data.status == "success") {
         toast.success(data.message);
+        setTimeout(() => {
+          setIsLoading(false);
+          router.replace("/login"); // Redirecting to the login page after successful signup
+        }, 1500);
+      } else {
+        toast.error(data.message);
+        setIsLoading(false);
       }
-      else {
-        toast.error(data.message)
-      }
-      console.log(data);
     } catch (error: any) {
-      toast.error(error);
-    }
-
+      toast.error("An error occurred during signup.");
+      setIsLoading(false);
+    }    
     setTimeout(() => {
       localStorage.setItem("token", "mocked_jwt_token");
       localStorage.setItem("role", role);
@@ -278,6 +555,31 @@ export default function SignupPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-blue-500 to-purple-800">
+      {/* <div className="absolute inset-0 grid grid-cols-5 gap-6 w-full p-10">
+              {images &&
+                Array.from({ length: ROWS }).map((_, rowIndex) =>
+                  Array.from({ length: COLS }).map((_, colIndex) => {
+                    const imageIndex = rowIndex * COLS + colIndex;
+                    return (
+                      <motion.div
+                        key={`${rowIndex}-${colIndex}`}
+                        className="relative flex justify-center items-center"
+                        animate={generateAnimation()}
+                      >
+                        {images[imageIndex] ? (
+                          <Image
+                            src={images[imageIndex]}
+                            alt="Bike Image"
+                            width={80}
+                            height={80}
+                            className="rounded-lg shadow-lg"
+                          />
+                        ) : null}
+                      </motion.div>
+                    );
+                  })
+                )}
+            </div> */}
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, scale: 0.9 }}
@@ -295,44 +597,71 @@ export default function SignupPage() {
         </motion.h1>
 
         <div className="space-y-4">
-          {[
-            { name: "username", icon: UserIcon, placeholder: "Full Name" },
-            { name: "email", icon: MailIcon, placeholder: "Email" },
-            { name: "mobile", icon: PhoneIcon, placeholder: "Mobile Number" },
-            { name: "password", icon: LockIcon, placeholder: "Create Password" },
-            { name: "confirmPassword", icon: LockIcon, placeholder: "Confirm Password" },
-            { name: "address", icon: HomeIcon, placeholder: "Address..." }
+        {formFields.map((field) => (
+      <motion.div
+        key={field.name}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="relative"
+      >
+        {/* Icon */}
+        <field.icon className="absolute left-3 top-3 text-gray-500" size={20} />
+        
+        {/* Input */}
+        <input
+          type={
+            field.name === "password"
+              ? showPassword
+                ? "text"
+                : "password"
+              : field.name === "confirmPassword"
+                ? showConfirmPassword
+                  ? "text"
+                  : "password"
+                : "text"
+          }
+          name={field.name}
+          placeholder={field.placeholder}
+          value={formData[field.name as keyof typeof formData]}
+          onChange={handleChange}
+          autoComplete="off"
+          className="w-full p-3 pl-10 border rounded-lg focus:ring-2 focus:ring-purple-500"
+          required
+        />
 
+        {/* Toggle Button for Password and Confirm Password */}
+        {field.isPassword && (
+          <span
+            className="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+            onClick={
+              field.name === "password"
+                ? togglePasswordVisibility
+                : toggleConfirmPasswordVisibility
+            }
+          >
+            {field.name === "password"
+              ? showPassword
+                ? "👁️"
+                : "🙈"
+              : showConfirmPassword
+                ? "👁️"
+                : "🙈"}
+          </span>
+        )}
 
-          ].map((field, index) => (
-            <motion.div
-              key={field.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + index * 0.1 }}
-              className="relative"
-            >
-              <field.icon className="absolute left-3 top-3 text-gray-500" size={20} />
-              <input
-                type={field.name.includes("password") ? "password" : "text"}
-                name={field.name}
-                placeholder={field.placeholder}
-                value={formData[field.name as keyof typeof formData]}
-                onChange={handleChange}
-                className="w-full p-3 pl-10 border rounded-lg focus:ring-2 focus:ring-purple-500"
-                required
-              />
-              {field.name === "confirmPassword" && formData.confirmPassword && (
-                <span className="absolute inset-y-0 right-3 flex items-center">
-                  {passwordsMatch ? (
-                    <CheckCircleIcon className="text-green-500" size={24} />
-                  ) : (
-                    <XCircleIcon className="text-red-500" size={24} />
-                  )}
-                </span>
-              )}
-            </motion.div>
-          ))}
+        {/* Match Indicator for Confirm Password */}
+        {field.name === "confirmPassword" && formData.confirmPassword && (
+          <span className="absolute inset-y-0 right-10 flex items-center">
+            {passwordsMatch ? (
+              <CheckCircleIcon className="text-green-500" size={24} />
+            ) : (
+              <XCircleIcon className="text-red-500" size={24} />
+            )}
+          </span>
+        )}
+      </motion.div>
+    ))}
 
           {/* reCAPTCHA Field */}
           <motion.div
@@ -400,3 +729,5 @@ export default function SignupPage() {
     </div>
   );
 }
+
+
