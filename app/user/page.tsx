@@ -54,33 +54,42 @@ export default function UserDashboard() {
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
-    
-    if (!token || role !== "user") {
-      setIsAuthorized(false);
-      const timeout = setTimeout(() => {
-        router.replace("/");
-      }, 60000);
-      return () => clearTimeout(timeout);
-    } else {
-      setIsAuthorized(true);
+    if (typeof window !== "undefined") {
+      try {
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+  
+        if (!token || role !== "user") {
+          setIsAuthorized(false);
+          const timeout = setTimeout(() => {
+            router.replace("/");
+          }, 60000);
+          return () => clearTimeout(timeout);
+        } else {
+          setIsAuthorized(true);
+        }
+      } catch (error) {
+        console.error("Failed to access localStorage:", error);
+        setIsAuthorized(false);
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
-
-  // Logout Function with Toast Notification
+  }, []);
+  
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-
-    toast.success("Logged out successfully!"); // Success Toast
-    router.push("/login"); // Redirect to login page
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        toast.success("Logged out successfully!");
+        router.push("/login");
+      } catch (error) {
+        console.error("Failed to clear localStorage:", error);
+      }
+    }
   };
-  if (isAuthorized === null) {
-    return <p className="text-center text-gray-500 mt-10">Checking Authorization...</p>;
-  }
+  
 
   if (!isAuthorized) {
     return (

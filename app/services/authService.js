@@ -10,8 +10,14 @@ export const login = async (credentials) => {
 };
 
 export const getAuthHeader = () => {
-    return { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } };
-  };
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
+    if (token) {
+      return { headers: { Authorization: `Bearer ${token}` } };
+    }
+  }
+  return {}; // Return an empty object if no token is available
+};
 
 // usage example  
 // axios.get("http://localhost:8080/api/protected", getAuthHeader());

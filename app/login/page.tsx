@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MailIcon, LockIcon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "user";
@@ -90,14 +90,17 @@ export default function LoginPage() {
       if (data.status === "error") {
         toast.error("Login failed! Invalid credentials.");
       } else if (data.status === "success") {
-        localStorage.setItem("token", data.token || data.message);
-        localStorage.setItem("role", role);
-        if (data.userId) {
-          localStorage.setItem("userId", data.userId);
-        } else {
-          console.warn("Warning: userId not received in response!");
+        // ✅ Access localStorage only on the client side
+        if (typeof window !== "undefined") {
+          localStorage.setItem("token", data.token || data.message);
+          localStorage.setItem("role", role);
+          if (data.userId) {
+            localStorage.setItem("userId", data.userId);
+          } else {
+            console.warn("Warning: userId not received in response!");
+          }
         }
-  
+
         toast.success(`${role === "admin" ? "Admin" : "User"} login successful!`);
         router.replace(role === "admin" ? "/admin" : "/user");
       }
@@ -233,5 +236,13 @@ export default function LoginPage() {
         )}
       </motion.form>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

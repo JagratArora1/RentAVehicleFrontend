@@ -120,13 +120,15 @@ function SignupPageContent() {
       toast.error("An error occurred during signup.");
       setIsLoading(false);
     }    
-    setTimeout(() => {
-      localStorage.setItem("token", "mocked_jwt_token");
-      localStorage.setItem("role", role);
-      setIsLoading(false);
-      toast.success(`${role === "admin" ? "Admin" : "User"} signup successful!`);
-      router.replace(role === "admin" ? "/admin" : "/login");
-    }, 3500);
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        localStorage.setItem("token", "mocked_jwt_token");
+        localStorage.setItem("role", role);
+        setIsLoading(false);
+        toast.success(`${role === "admin" ? "Admin" : "User"} signup successful!`);
+        router.replace(role === "admin" ? "/admin" : "/login");
+      }, 3500);
+    }
   };
 
   return (

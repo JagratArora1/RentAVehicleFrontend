@@ -51,36 +51,39 @@ export default function UserProfile() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const userId = localStorage.getItem("userId"); // Retrieve user ID from local storage
-        if (!userId) return;
-
-        const userData = await apiRequest(`customers/${userId}`, "GET");
-        console.log(userData);
-
-        const documents: DocumentFiles = {
-          drivingLicense: userData.documents?.drivingLicense ? new File([], userData.documents.drivingLicense) : null,
-          idProof: userData.documents?.idProof ? new File([], userData.documents.idProof) : null,
-          intlDrivingPermit: userData.documents?.intlDrivingPermit ? new File([], userData.documents.intlDrivingPermit) : null,
-          passport: userData.documents?.passport ? new File([], userData.documents.passport) : null,
-        };
-
-        setProfile({
-          fullName: userData.fullName || "",
-          email: userData.email || "",
-          mobile: userData.contactNumber || "",
-          address: userData.address || "",
-          emergencyContact: userData.emergencyContact || "",
-          profilePicture: userData.profilePicture ? new File([], userData.profilePicture) : null,
-          userType: userData.userType || "Indian",
-          documents,
-        });
+        if (typeof window !== "undefined") {
+          const userId = localStorage.getItem("userId"); // ✅ Only run on client side
+          if (!userId) return;
+  
+          const userData = await apiRequest(`customers/${userId}`, "GET");
+          console.log(userData);
+  
+          const documents: DocumentFiles = {
+            drivingLicense: userData.documents?.drivingLicense ? new File([], userData.documents.drivingLicense) : null,
+            idProof: userData.documents?.idProof ? new File([], userData.documents.idProof) : null,
+            intlDrivingPermit: userData.documents?.intlDrivingPermit ? new File([], userData.documents.intlDrivingPermit) : null,
+            passport: userData.documents?.passport ? new File([], userData.documents.passport) : null,
+          };
+  
+          setProfile({
+            fullName: userData.fullName || "",
+            email: userData.email || "",
+            mobile: userData.contactNumber || "",
+            address: userData.address || "",
+            emergencyContact: userData.emergencyContact || "",
+            profilePicture: userData.profilePicture ? new File([], userData.profilePicture) : null,
+            userType: userData.userType || "Indian",
+            documents,
+          });
+        }
       } catch (error) {
         console.error("Error fetching user profile:", error);
       }
     };
-
+  
     fetchUserProfile();
   }, []);
+  
 
   useEffect(() => {
     const requiredDocs = profile.userType === "Indian"
