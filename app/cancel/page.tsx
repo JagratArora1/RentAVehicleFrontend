@@ -1,7 +1,11 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect } from "react";
 export default function CancelPage() {
-  localStorage.removeItem("bookdata");
+  useEffect(() => {
+    localStorage.removeItem("bookdata");
+  }, []);
   return (
     
     <div className="flex flex-col items-center justify-center h-screen">
