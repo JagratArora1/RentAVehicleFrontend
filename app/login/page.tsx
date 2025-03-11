@@ -365,6 +365,7 @@ import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import Image from "next/image";
 // import Image from "next/image";
 
 // const ROWS = 5;
@@ -475,6 +476,12 @@ export default function LoginPage() {
       } else if (data.status === "success") {
         localStorage.setItem("token", data.token || data.message);
         localStorage.setItem("role", role);
+        if (data.userId) {
+          localStorage.setItem("userId", data.userId);
+        } else {
+          console.warn("Warning: userId not received in response!");
+        }
+  
         toast.success(`${role === "admin" ? "Admin" : "User"} login successful!`);
         router.replace(role === "admin" ? "/admin" : "/user");
       }
@@ -487,7 +494,15 @@ export default function LoginPage() {
   };
 
   return (
+    
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-blue-500 to-purple-800">
+      <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+        <Link href="/home" className="flex items-center">
+          <div className="relative h-8 w-8 mr-4">
+            <Image fill alt="Logo" src="/logo.jpg" />
+          </div>
+        </Link>
+      </header>
       {/* <div className="absolute inset-0 grid grid-cols-5 gap-6 w-full p-10">
               {images &&
                 Array.from({ length: ROWS }).map((_, rowIndex) =>

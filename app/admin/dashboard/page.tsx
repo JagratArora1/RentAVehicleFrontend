@@ -58,7 +58,7 @@ export default function AdminDashboard() {
             onChange={(e) => setSearchCarNo(e.target.value)}
             className="flex-1 border border-gray-300 rounded-lg px-3 py-2"
           />
-          <Input
+          {/* <Input
             type="date"
             value={searchDate}
             onChange={(e) => setSearchDate(e.target.value)}
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
             value={searchTime}
             onChange={(e) => setSearchTime(e.target.value)}
             className="flex-1 border border-gray-300 rounded-lg px-3 py-2"
-          />
+          /> */}
           <Button className="bg-blue-600 text-white px-6 py-2 rounded-lg flex items-center gap-2">
             <Search className="w-4 h-4" /> Check
           </Button>
@@ -87,7 +87,8 @@ export default function AdminDashboard() {
           <table className="w-full border-collapse border border-gray-300 rounded-lg">
             <thead className="bg-gray-200 text-gray-600">
               <tr>
-                <th className="p-3 text-left">No.</th>
+                <th className="p-3 text-left">S.No.</th>
+                <th className="p-3 text-left">Vehicle Id</th>
                 <th className="p-3 text-left">Vehicle No.</th>
                 <th className="p-3 text-left">Model Name</th>
                 <th className="p-3 text-left">Status</th>
@@ -97,6 +98,7 @@ export default function AdminDashboard() {
               {filteredVehicles.map((vehicle: any, index: number) => (
                 <tr key={index} className="border-b border-gray-200">
                   <td className="p-3">{index + 1}</td>
+                  <td className="p-3 font-semibold">{vehicle.vehicleId || "N/A"}</td>
                   <td className="p-3 font-semibold">{vehicle.vehicleNo}</td>
                   <td className="p-3 flex items-center gap-2">
                     

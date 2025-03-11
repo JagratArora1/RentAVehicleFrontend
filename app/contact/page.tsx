@@ -342,6 +342,8 @@
 
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function ContactUs() {
   const [formData, setFormData] = useState({
@@ -387,6 +389,13 @@ export default function ContactUs() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
+      <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+              <Link href="/user" className="flex items-center">
+                <div className="relative h-8 w-8 mr-4">
+                  <Image fill alt="Logo" src="/logo.jpg" />
+                </div>
+              </Link>
+            </header>
       <div className="container mx-auto px-4">
         {/* Company Info */}
         <div className="text-center mb-12">
@@ -454,17 +463,17 @@ export default function ContactUs() {
             <div className="space-y-4">
               <div>
                 <h3 className="text-lg font-semibold">📍 Address</h3>
-                <p className="text-gray-700">123 Rent A Car Street, New Delhi, India</p>
+                <p className="text-gray-700">FIL Office, Tower 9, Gurugram</p>
               </div>
 
               <div>
                 <h3 className="text-lg font-semibold">📞 Phone</h3>
-                <p className="text-gray-700">+91 98765 43210</p>
+                <p className="text-gray-700">+91 98261 11153</p>
               </div>
 
               <div>
                 <h3 className="text-lg font-semibold">✉️ Email</h3>
-                <p className="text-gray-700">support@rentacar.com</p>
+                <p className="text-gray-700">jagrat@elitewheels.com</p>
               </div>
 
               <div>

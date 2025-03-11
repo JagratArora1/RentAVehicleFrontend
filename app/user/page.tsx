@@ -14,6 +14,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import { useEffect, useState } from "react";
 
 
 // Mock Data for Vehicles
@@ -25,19 +26,19 @@ type Vehicle = {
 
 const vehicles: Record<string, Vehicle[]> = {
   premium: [
-    { name: "Jaguar XE", price: "₹20000/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Jaguar+XE.jpg" },
-    { name: "BMW 3 Series", price: "₹18000/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/BMW+3+Series.jpg" },
-    { name: "Ninja 300", price: "₹1500/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Ninja-300-front-static.jpg" },
+    { name: "Jaguar XE", price: "₹20000/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/beff88ac-1550-4249-9bf0-507e9a0c450b-Jaguar+XE.jpg" },
+    { name: "BMW 3 Series", price: "₹18000/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/1354d4a3-f35a-4753-9294-f144f1658bc5-BMW+3+Series.jpg" },
+    { name: "Ninja 300", price: "₹1500/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/5e5d1be1-8065-44a9-97c8-cf0c77fd4a4d-Ninja300.jpg" },
   ],
   affordable: [
-    { name: "Ola S1 pro", price: "₹350/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Ola-S1-Pro.jpg" },
-    { name: "Honda Activa 6G", price: "₹400/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Honda+Activa+6G.jpg" },
-    { name: "Maruti Suzuki", price: "₹1800/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/marutisuzuki.jpg" },
+    { name: "Ola S1 pro", price: "₹350/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/2a53e770-0c15-4287-b979-0c47d33bc0c5-Ola-S1-Pro.jpg" },
+    { name: "Honda Activa 6G", price: "₹400/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/662e3492-8e8c-4d97-88a5-c5f6cbbf5f32-Honda+Activa+6G.jpg" },
+    { name: "Maruti Suzuki", price: "₹1800/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/a070cc5c-4c3f-4bd7-bebd-21f97fee9757-marutisuzuki.jpg" },
   ],
   mostRented: [
-    { name: "Ather 450X", price: "₹450/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Ather+450X.jpg" },
-    { name: "Honda City", price: "₹4500/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Honda+City.jpg" },
-    { name: "Hyundai Creta", price: "₹7000/day", img: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Hyundai+Creta.jpg" },
+    { name: "Ather 450X", price: "₹450/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/54da271b-d03c-4995-be3d-289eaa1b89b0-Ather+450X.jpg" },
+    { name: "Honda City", price: "₹4500/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/4a34d0f1-7172-499e-8657-d69bd98a6c7e-Honda+City.jpg" },
+    { name: "Hyundai Creta", price: "₹7000/day", img: "https://rentvehicledoc.s3.ap-south-1.amazonaws.com/5abecc43-f5ce-409e-9df2-ea1e45ff7b37-Hyundai+Creta.jpg" },
   ],
 };
 
@@ -50,6 +51,22 @@ const font = Montserrat({
 
 export default function UserDashboard() {
   const router = useRouter();
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    
+    if (!token || role !== "user") {
+      setIsAuthorized(false);
+      const timeout = setTimeout(() => {
+        router.replace("/");
+      }, 60000);
+      return () => clearTimeout(timeout);
+    } else {
+      setIsAuthorized(true);
+    }
+  },[]);
 
   // Logout Function with Toast Notification
   const handleLogout = () => {
@@ -60,7 +77,18 @@ export default function UserDashboard() {
     toast.success("Logged out successfully!"); // Success Toast
     router.push("/login"); // Redirect to login page
   };
+  if (isAuthorized === null) {
+    return <p className="text-center text-gray-500 mt-10">Checking Authorization...</p>;
+  }
 
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-3xl font-bold text-red-500">403 Forbidden</h1>
+        <p className="text-lg text-gray-600">You are not authorized to access this page.</p>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
   {/* Toast Notifications */}
@@ -68,7 +96,7 @@ export default function UserDashboard() {
 
   {/* Full-width Top Navbar */}
   <header className="w-full px-4 sm:px-6 lg:px-8 py-4 shadow-md bg-white flex justify-between items-center">
-    <Link href="/home" className="flex items-center">
+    <Link href="/user" className="flex items-center">
       <div className="relative h-8 w-8 mr-4">
         <Image fill alt="Logo" src="/logo.jpg" />
       </div>
@@ -166,10 +194,13 @@ export default function UserDashboard() {
                       },
                     }}
                 >
+                  
                   <Button variant="default" className="mt-2 w-full">
                     Book Now
                   </Button>
-                </Link>
+                  
+                  </Link>
+                
               </CardContent>
             </Card>
           ))}
@@ -184,3 +215,5 @@ export default function UserDashboard() {
 
   );
 }
+
+

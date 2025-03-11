@@ -111,7 +111,7 @@
 "use client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
-import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
+import { DollarSign, TrendingUp, TrendingDown, IndianRupee } from "lucide-react";
 
 const revenueData = [
   { month: "Jan", revenue: 12000 },
@@ -144,12 +144,12 @@ export default function RevenuePage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <DollarSign className="text-green-500" />
+              <IndianRupee className="text-green-500" />
               <span>Total Revenue</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">$120,000</p>
+            <p className="text-2xl font-semibold">₹120,000</p>
           </CardContent>
         </Card>
 
@@ -161,7 +161,7 @@ export default function RevenuePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">$30,000</p>
+            <p className="text-2xl font-semibold">₹30,000</p>
           </CardContent>
         </Card>
 
@@ -173,7 +173,7 @@ export default function RevenuePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">$90,000</p>
+            <p className="text-2xl font-semibold">₹90,000</p>
           </CardContent>
         </Card>
       </div>
@@ -232,7 +232,7 @@ export default function RevenuePage() {
               {transactions.map((transaction) => (
                 <tr key={transaction.id} className="border-b">
                   <td className="p-2">{transaction.description}</td>
-                  <td className="p-2">${transaction.amount}</td>
+                  <td className="p-2">₹{transaction.amount}</td>
                   <td className={`p-2 font-semibold ${transaction.type === "income" ? "text-green-500" : "text-red-500"}`}>
                     {transaction.type}
                   </td>

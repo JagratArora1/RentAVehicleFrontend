@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import ChangePasswordModal from "@/components/ChangePasswordModal";
+// import ChangePasswordModal from "@/components/ChangePasswordModal";
 import { apiRequest } from "../apiconnect/api";
+import Link from "next/link";
 
 interface DocumentFiles {
   drivingLicense: File | null;
@@ -93,13 +94,20 @@ export default function UserProfile() {
     const completedDocs = requiredDocs.filter(Boolean).length;
     const totalFields = Object.keys(profile).length + requiredDocs.length;
 
-    setCompletion(((filledFields + completedDocs) / totalFields) * 100);
+    setCompletion(( totalFields) * 10);
   }, [profile]);
 
   if (!profile.fullName) return <p>Loading...</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+              <Link href="/user" className="flex items-center">
+                <div className="relative h-8 w-8 mr-4">
+                  <Image fill alt="Logo" src="/logo.jpg" />
+                </div>
+              </Link>
+            </header>
       <h1 className="text-3xl font-bold mb-6">User Profile</h1>
 
       {/* Profile Completion Progress Bar */}
@@ -136,7 +144,7 @@ export default function UserProfile() {
 
 
       {/* Document Upload Section */}
-      <div className="mt-8">
+      {/* <div className="mt-8">
         <h2 className="text-2xl font-semibold mb-4">Upload Documents</h2>
         <Label>User Type *</Label>
         <select
@@ -173,12 +181,12 @@ export default function UserProfile() {
             </>
           )}
         </div>
-      </div>
+      </div> */}
 
-      <div className="flex justify-between item-center">
+      <div className="flex justify-end item-center">
 
         <Button className="mt-8" onClick={() => router.push("/user")}>Go Back</Button>
-        <Button className="mt-8" onClick={() => router.push("/")}>Save Changes</Button>
+        {/* <Button className="mt-8" onClick={() => router.push("/")}>Save Changes</Button> */}
       </ div>
     </div>
   );

@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { apiRequest } from "@/app/apiconnect/api";
+import Link from "next/link";
+import Image from "next/image";
 
 export default function BookingsPage() {
     const [bookings, setBookings] = useState<any[]>([]);
@@ -44,6 +46,13 @@ export default function BookingsPage() {
 
     return (
         <div className="max-w-6xl mx-auto px-6 py-8">
+            <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+                    <Link href="/user" className="flex items-center">
+                      <div className="relative h-8 w-8 mr-4">
+                        <Image fill alt="Logo" src="/logo.jpg" />
+                      </div>
+                    </Link>
+                  </header>
             <h1 className="text-3xl font-bold text-center my-5">Your Bookings</h1>
 
             <motion.div
@@ -68,9 +77,16 @@ export default function BookingsPage() {
                                 <p className={`text-sm font-semibold mt-2 ${booking.status === "confirmed" ? "text-green-600" : "text-red-600"}`}>
                                     Status: {booking.status}
                                 </p>
-                                <Button variant="default" className="mt-3 w-full">
+                                 {/* <Button variant="default" className="mt-3 w-full">
                                     View Details
-                                </Button>
+                                </Button> */}
+                                {booking.status === "confirmed" && (
+                                    <Link href={`./view-details?vehicleId=${booking.vehicle.vehicleId}`}>
+                                        <Button variant="default" className="mt-3 w-full">
+                                            View Details
+                                        </Button>
+                                    </Link>
+                                )}
                             </CardContent>
                         </Card>
                     ))

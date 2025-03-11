@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const founders = [
   {
@@ -41,6 +42,13 @@ const founders = [
 export default function AboutUs() {
   return (
     <div className="min-h-screen bg-gray-100 py-10">
+      <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+        <Link href="/user" className="flex items-center">
+          <div className="relative h-8 w-8 mr-4">
+            <Image fill alt="Logo" src="/logo.jpg" />
+          </div>
+        </Link>
+      </header>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Company Info */}
         <div className="text-center mb-12">
@@ -86,6 +94,7 @@ export default function AboutUs() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }

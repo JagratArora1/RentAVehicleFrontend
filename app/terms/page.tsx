@@ -1,10 +1,19 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function TermsAndConditions() {
   return (
     <div className="min-h-screen bg-gray-100 py-10">
+      <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+              <Link href="/user" className="flex items-center">
+                <div className="relative h-8 w-8 mr-4">
+                  <Image fill alt="Logo" src="/logo.jpg" />
+                </div>
+              </Link>
+            </header>
       <div className="container mx-auto px-4 max-w-4xl">
         <h1 className="text-4xl font-extrabold text-center mb-8">Terms and Conditions</h1>
 

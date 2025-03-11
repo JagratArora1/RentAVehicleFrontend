@@ -306,21 +306,27 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, PlusCircle, BarChart, Star, ExternalLink, Users, Car, DollarSign, User } from "lucide-react";
+import { LogOut, LayoutDashboard, PlusCircle, BarChart, Star, ExternalLink, Users, Car, User, File, IndianRupee, CarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const data = [
+  { month: "Jan", current: 230000, lastYear: 120000 },
+  { month: "Feb", current: 160000, lastYear: 120000 },
+  { month: "Mar", current: 200000, lastYear: 120000 },
+  { month: "Apr", current: 290000, lastYear: 120000 },
   { month: "May", current: 220000, lastYear: 120000 },
   { month: "Jun", current: 270000, lastYear: 150000 },
   { month: "Jul", current: 210000, lastYear: 160000 },
   { month: "Aug", current: 250000, lastYear: 180000 },
   { month: "Sep", current: 260000, lastYear: 190000 },
   { month: "Oct", current: 280000, lastYear: 200000 },
+  { month: "Nov", current: 220000, lastYear: 120000 },
+  { month: "Dec", current: 220000, lastYear: 120000 },
 ];
 interface SidebarItemProps {
   label: string;
@@ -352,7 +358,25 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, active, on
 export default function AdminDashboard() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeTab, setActiveTab] = useState("Dashboard");
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+  
+    if (!token || role !== "admin") {
+      setIsAuthorized(false);
+      
+      const timeout = setTimeout(() => {
+        router.replace("/");
+      }, 60000); // Redirect after 1 minute
+  
+      return () => clearTimeout(timeout); // Cleanup if component unmounts before timeout
+    } else {
+      setIsAuthorized(true);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -360,16 +384,28 @@ export default function AdminDashboard() {
     toast.success("Logged out successfully!");
     router.replace("/");
   };
+  if (isAuthorized === null) {
+    return <p className="text-center text-gray-500 mt-10">Checking Authorization...</p>;
+  }
 
+  if (!isAuthorized) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-3xl font-bold text-red-500">403 Forbidden</h1>
+        <p className="text-lg text-gray-600">You are not authorized to access this page.</p>
+      </div>
+    );
+  }
   const navigateTo = (path: string) => {
     router.push(path);
   };
 
   const sidebarItems = [
-    { label: "Dashboard", icon: LayoutDashboard, path: "/admin/dashboard" },
+    { label: "Vehicle Details", icon: CarIcon, path: "/admin/dashboard" },
     { label: "Add a New Vehicle", icon: PlusCircle, path: "/admin/add-vehicle" },
+    { label: "Upload Documents", icon: File, path: "/admin/upload-documents" },
     { label: "Revenue P&L", icon: BarChart, path: "/admin/revenue" },
-    { label: "Vehicle Reviews", icon: Star, path: "/admin/reviews" },
+    // { label: "Vehicle Reviews", icon: Star, path: "/admin/reviews" },
     { label: "Users", icon: User, path: "/admin/users" },
     { label: "Crisp Dashboard", icon: ExternalLink, path: "https://app.crisp.chat/" },
   ];
@@ -407,21 +443,21 @@ export default function AdminDashboard() {
             <div className="bg-gray-800 p-6 rounded-lg shadow-md flex items-center gap-4">
               <Users className="w-10 h-10 text-blue-400" />
               <div>
-                <p className="text-lg font-semibold">1,245</p>
+                <p className="text-lg font-semibold">12</p>
                 <p className="text-gray-400">Total Users</p>
               </div>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg shadow-md flex items-center gap-4">
               <Car className="w-10 h-10 text-green-400" />
               <div>
-                <p className="text-lg font-semibold">650</p>
+                <p className="text-lg font-semibold">25</p>
                 <p className="text-gray-400">Total Bookings</p>
               </div>
             </div>
             <div className="bg-gray-800 p-6 rounded-lg shadow-md flex items-center gap-4">
-              <DollarSign className="w-10 h-10 text-yellow-400" />
+              <IndianRupee className="w-10 h-10 text-yellow-400" />
               <div>
-                <p className="text-lg font-semibold">$23,400</p>
+                <p className="text-lg font-semibold">₹23,20,400</p>
                 <p className="text-gray-400">Revenue This Month</p>
               </div>
             </div>

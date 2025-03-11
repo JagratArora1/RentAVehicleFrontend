@@ -50,7 +50,7 @@ export default function UploadDocumentsPage() {
                     console.log(response);
                     if (response.status == 200) {
                         toast.success("uploaded successfully!");
-                        router.push("/admin/dashboard")
+                        router.push("/admin")
                     }
                     else {
                         toast.error("File upload failed")

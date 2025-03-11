@@ -83,7 +83,7 @@ export default function AddVehiclePage() {
       if (response.ok) {
         setMessage("Vehicle added successfully!");
         setTimeout(() => {
-          router.push(`../admin/upload-documents?vehicleId=${15}`);
+          router.push(`../admin/dashboard`);
         }, 2000);
 
       } else {

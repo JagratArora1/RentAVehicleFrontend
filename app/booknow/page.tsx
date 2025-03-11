@@ -313,6 +313,7 @@ import { Button } from "@/components/ui/button";
 import { loadStripe } from "@stripe/stripe-js";
 import { apiRequest } from "@/app/apiconnect/api";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 export default function BookNowPage() {
   const searchParams = useSearchParams();
@@ -360,10 +361,10 @@ export default function BookNowPage() {
         return;
       }
 
-      if (!userId || !token) {
-        alert("User not authenticated. Please log in.");
-        return;
-      }
+      // if (!userId || !token) {
+      //   alert("User not authenticated. Please log in.");
+      //   return;
+      // }
       const bookdata = [
         {
           "customer": {
@@ -422,6 +423,13 @@ export default function BookNowPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-6 flex flex-col md:flex-row gap-6">
+      <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+              <Link href="/user" className="flex items-center">
+                <div className="relative h-8 w-8 mr-4">
+                  <Image fill alt="Logo" src="/logo.jpg" />
+                </div>
+              </Link>
+            </header>
       {/* Left: Vehicle Image */}
       <div className="w-full md:w-1/2">
         {image && (
@@ -441,25 +449,53 @@ export default function BookNowPage() {
         <p className="text-gray-700 text-lg">Price Per Day: <span className="font-semibold">₹{pricePerDay}</span></p>
 
         {/* Date Pickers */}
-        <div>
-          <label className="block text-sm font-medium">Start Date</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full p-2 border rounded-lg mt-1"
-          />
-        </div>
+        {/* Start Date */}
+<div>
+  <label className="block text-sm font-medium">Start Date</label>
+  <input
+    type="date"
+    value={startDate}
+    min={new Date().toISOString().split("T")[0]} // Minimum start date = today
+    onChange={(e) => {
+      const selectedStartDate = new Date(e.target.value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time to avoid time mismatches
 
-        <div>
-          <label className="block text-sm font-medium">End Date</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="w-full p-2 border rounded-lg mt-1"
-          />
-        </div>
+      if (selectedStartDate.getTime() < today.getTime()) {
+        toast.error("Start date cannot be before today's date.");
+      } else {
+        setStartDate(e.target.value);
+
+        // Reset end date if it's before the new start date
+        if (endDate && selectedStartDate.getTime() > new Date(endDate).getTime()) {
+          setEndDate("");
+          toast.error("End date cannot be before start date.");
+        }
+      }
+    }}
+    className="w-full p-2 border rounded-lg mt-1"
+  />
+</div>
+
+{/* End Date */}
+<div>
+  <label className="block text-sm font-medium">End Date</label>
+  <input
+    type="date"
+    value={endDate}
+    min={startDate || new Date().toISOString().split("T")[0]} // End date cannot be before start date
+    onChange={(e) => {
+      const selectedEndDate = new Date(e.target.value);
+      if (selectedEndDate.getTime() < new Date(startDate).getTime()) {
+        toast.error("End date cannot be before start date.");
+      } else {
+        setEndDate(e.target.value);
+      }
+    }}
+    className="w-full p-2 border rounded-lg mt-1"
+  />
+</div>
+
 
         {/* Total Price Calculation */}
         <p className="text-lg font-semibold">Total Price: ₹{totalPrice}</p>

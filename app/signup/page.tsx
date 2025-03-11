@@ -410,6 +410,7 @@ import { motion } from "framer-motion";
 import ReCAPTCHA from "react-google-recaptcha";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import Link from "next/link";
 
 // const ROWS = 5;
 // const COLS = 4; // Fixed to a 5x5 grid for better alignment
@@ -555,6 +556,13 @@ export default function SignupPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-blue-500 to-purple-800">
+      <header className="absolute top-0 left-0 w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center z-20">
+              <Link href="/home" className="flex items-center">
+                <div className="relative h-8 w-8 mr-4">
+                  <Image fill alt="Logo" src="/logo.jpg" />
+                </div>
+              </Link>
+            </header>
       {/* <div className="absolute inset-0 grid grid-cols-5 gap-6 w-full p-10">
               {images &&
                 Array.from({ length: ROWS }).map((_, rowIndex) =>
