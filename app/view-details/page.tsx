@@ -10,6 +10,7 @@ const VehicleBookings = () => {
   const searchParams = useSearchParams();
   const vehicleId = searchParams.get("vehicleId");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [documents, setDocuments] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

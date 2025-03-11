@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
 import { motion } from "framer-motion";
-import { json } from "stream/consumers";
 import toast from "react-hot-toast";
 
 export default function UploadDocumentsPage() {
@@ -56,6 +55,7 @@ export default function UploadDocumentsPage() {
                         toast.error("File upload failed")
                     }
 
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 } catch (error: any) {
                     console.error("Upload error:", error);
                     alert(`Error uploading ${docType}: ${error.message}`);

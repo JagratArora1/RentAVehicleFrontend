@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = "http://localhost:2237";
 
 export async function apiRequest(endpoint: string, method: string, body?: any) {

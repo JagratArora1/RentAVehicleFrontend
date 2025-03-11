@@ -14,12 +14,11 @@ export default function AddVehiclePage() {
   const [vehicleType, setVehicleType] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [token, setToken] = useState<string | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
-  const [vehicleId, setVehicleId] = useState<any>();
+  // const [userId, setUserId] = useState<string | null>(null);
+  // const [vehicleId, setVehicleId] = useState<any>();
   useEffect(() => {
-    const id = localStorage.getItem("userId");
-    setUserId(id || null);
-
+    // const id = localStorage.getItem("userId");
+    // setUserId(id || null);
     const storedToken = localStorage.getItem("token");
     setToken(storedToken || null);
   }, []);
@@ -34,10 +33,8 @@ export default function AddVehiclePage() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
   const twoWheelerOptions = ["E_Scooty", "Scooty", "Sports_Bike", "Bike"];
   const fourWheelerOptions = ["Sedan", "XUV", "Hatchback", "Premium"];
-
   // Handle input field changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,7 +43,6 @@ export default function AddVehiclePage() {
   const handleSubmit = async () => {
     setLoading(true);
     setMessage("");
-
     if (!vehicleType || !subCategory || !formData.modelName || !formData.vehicleNumber || !formData.pricePerDay) {
       setMessage("Please fill all required fields.");
       setLoading(false);
@@ -63,9 +59,7 @@ export default function AddVehiclePage() {
       status: formData.status || "available", // Default value
       pricePerDay: formData.pricePerDay ? parseFloat(formData.pricePerDay) : 0.0, // Ensure valid number
     };
-
     console.log("Sending JSON:", JSON.stringify(vehicleData));
-
     try {
       const response = await fetch("http://localhost:2237/vehicles/create", {
         method: "POST",
@@ -76,16 +70,13 @@ export default function AddVehiclePage() {
         },
         body: JSON.stringify(vehicleData),
       });
-
       console.log("Response:", response);
       // setVehicleId(response.vehicleId);
-
       if (response.ok) {
         setMessage("Vehicle added successfully!");
         setTimeout(() => {
           router.push(`../admin/dashboard`);
         }, 2000);
-
       } else {
         const result = await response.json();
         setMessage(result || "Failed to add vehicle. Please try again.");
@@ -97,8 +88,6 @@ export default function AddVehiclePage() {
       setLoading(false);
     }
   };
-
-
   return (
     <motion.div
       className="max-w-4xl mx-auto p-6 space-y-6"
@@ -125,7 +114,6 @@ export default function AddVehiclePage() {
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <Label>Subcategory</Label>
               <Select value={subCategory} onValueChange={setSubCategory} disabled={!vehicleType}>
@@ -142,7 +130,6 @@ export default function AddVehiclePage() {
               </Select>
             </div>
           </div>
-
           {/* Other Vehicle Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -190,14 +177,12 @@ export default function AddVehiclePage() {
               <Input name="pricePerDay" type="text" placeholder="Enter price per day" onChange={handleChange} />
             </div>
           </div>
-
           {/* Status Message */}
           {message && (
             <p className={`text-center font-semibold ${message.includes("success") ? "text-green-600" : "text-red-600"}`}>
               {message}
             </p>
           )}
-
           {/* Save Changes Button */}
           <div className="flex justify-end">
             <Button className="bg-blue-600 hover:bg-blue-700" onClick={handleSubmit} disabled={loading}>

@@ -66,6 +66,7 @@ export default function UserDashboard() {
     } else {
       setIsAuthorized(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   // Logout Function with Toast Notification

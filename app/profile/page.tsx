@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-// import ChangePasswordModal from "@/components/ChangePasswordModal";
 import { apiRequest } from "../apiconnect/api";
 import Link from "next/link";
 
@@ -30,7 +29,6 @@ interface UserProfileData {
 
 export default function UserProfile() {
   const router = useRouter();
-  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [profile, setProfile] = useState<UserProfileData>({
     fullName: "",
     email: "",
@@ -85,13 +83,9 @@ export default function UserProfile() {
   }, []);
 
   useEffect(() => {
-    const filledFields = Object.values(profile).filter((value) => value && value !== "").length;
-
     const requiredDocs = profile.userType === "Indian"
       ? [profile.documents.drivingLicense, profile.documents.idProof]
       : [profile.documents.intlDrivingPermit, profile.documents.passport];
-
-    const completedDocs = requiredDocs.filter(Boolean).length;
     const totalFields = Object.keys(profile).length + requiredDocs.length;
 
     setCompletion(( totalFields) * 10);
@@ -135,58 +129,9 @@ export default function UserProfile() {
           <Label>Current Residing Address <span className="text-red-500">*</span></Label>
           <Input type="text" name="address" value={profile.address} disabled />
         </div>
-        {/* <div>
-          <Label>Emergency Contact Number <span className="text-red-500">*</span></Label>
-          <Input type="text" name="emergencyContact" value={profile.emergencyContact} />
-        </div> */}
       </div>
-
-
-
-      {/* Document Upload Section */}
-      {/* <div className="mt-8">
-        <h2 className="text-2xl font-semibold mb-4">Upload Documents</h2>
-        <Label>User Type *</Label>
-        <select
-          className="border p-2 rounded w-full mb-4"
-          value={profile.userType}
-          onChange={(e) => setProfile({ ...profile, userType: e.target.value as "Indian" | "NRI" })}
-        >
-          <option value="Indian">Indian</option>
-          <option value="NRI">NRI</option>
-        </select>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {profile.userType === "Indian" ? (
-            <>
-              <div>
-                <Label>Driving License *</Label>
-                <Input type="file" name="drivingLicense" accept="image/*,application/pdf" required />
-              </div>
-              <div>
-                <Label>Aadhar/PAN Card *</Label>
-                <Input type="file" name="idProof" accept="image/*,application/pdf" required />
-              </div>
-            </>
-          ) : (
-            <>
-              <div>
-                <Label>International Driving Permit *</Label>
-                <Input type="file" name="intlDrivingPermit" accept="image/*,application/pdf" required />
-              </div>
-              <div>
-                <Label>Passport *</Label>
-                <Input type="file" name="passport" accept="image/*,application/pdf" required />
-              </div>
-            </>
-          )}
-        </div>
-      </div> */}
-
       <div className="flex justify-end item-center">
-
         <Button className="mt-8" onClick={() => router.push("/user")}>Go Back</Button>
-        {/* <Button className="mt-8" onClick={() => router.push("/")}>Save Changes</Button> */}
       </ div>
     </div>
   );
