@@ -11,23 +11,29 @@ import Image from "next/image";
 
 export default function BookingsPage() {
     const [bookings, setBookings] = useState<any[]>([]);
-    const customerId=localStorage.getItem("userId");
+    const [customerId, setCustomerId] = useState<string | null>(null); // ✅ Store customerId in state
+
+useEffect(() => {
+    const storedCustomerId = localStorage.getItem("userId"); // ✅ Access localStorage only on client
+    setCustomerId(storedCustomerId);
+}, []); // ✅ Runs only after the component mounts
     // console/
     // const customerId = "C0001"; // Replace this with dynamic customerId if needed
+//const res = await apiRequest(`bookings/customer/${customerId}`, "GET");
+useEffect(() => {
+    if (!customerId) return; // ✅ Prevents API call until customerId is set
 
-    useEffect(() => {
-        const fetchBookings = async () => {
-            try {
-                const res = await apiRequest(`bookings/customer/${customerId}`, "GET");
-                setBookings(res);
-            } catch (error) {
-                console.error("Error fetching bookings:", error);
-            }
-        };
+    const fetchBookings = async () => {
+        try {
+            const res = await apiRequest(`bookings/customer/${customerId}`, "GET");
+            setBookings(res);
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+        }
+    };
 
-        fetchBookings();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    fetchBookings();
+}, [customerId]); // ✅ Runs only when customerId is set
 
     const formatDate = (dateString: { toString: () => string; }) => {
         if (!dateString) return "N/A"; // Handle missing dates
