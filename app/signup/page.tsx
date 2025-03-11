@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircleIcon, XCircleIcon, MailIcon, PhoneIcon, LockIcon, UserIcon, HomeIcon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -14,7 +14,7 @@ const isValidMobile = (mobile: string) => /^[0-9]{10}$/.test(mobile);
 const isStrongPassword = (password: string) =>
   /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(password);
 const isValidAddress = (address: string) => address.trim().length >= 5;
-export default function SignupPage() {
+function SignupPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "user";
@@ -289,3 +289,10 @@ export default function SignupPage() {
 }
 
 
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupPageContent />
+    </Suspense>
+  );
+}

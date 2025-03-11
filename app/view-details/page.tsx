@@ -1,12 +1,12 @@
 
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { apiRequest } from "../apiconnect/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-const VehicleBookings = () => {
+function VehicleBookingsContent ()  {
   const searchParams = useSearchParams();
   const vehicleId = searchParams.get("vehicleId");
 
@@ -92,5 +92,11 @@ const VehicleBookings = () => {
   );
 };
 
-export default VehicleBookings;
+export default function VehicleBookings() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VehicleBookingsContent />
+    </Suspense>
+  );
+}
 
