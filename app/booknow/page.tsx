@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import toast from "react-hot-toast";
 import Link from "next/link";
 
-export default function BookNowPage() {
+function BookNowContent() {
   const searchParams = useSearchParams();
 
   // Extract details from query params
@@ -194,5 +194,13 @@ export default function BookNowPage() {
         </Button>
       </div>
     </div>
+  );
+}
+
+export default function BookNowPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BookNowContent />
+    </Suspense>
   );
 }
