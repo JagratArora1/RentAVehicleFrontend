@@ -61,7 +61,7 @@ export default function AddVehiclePage() {
     };
     console.log("Sending JSON:", JSON.stringify(vehicleData));
     try {
-      const response = await fetch("http://localhost:2237/vehicles/create", {
+      const response = await fetch("https://web-production-7c280.up.railway.app/vehicles/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

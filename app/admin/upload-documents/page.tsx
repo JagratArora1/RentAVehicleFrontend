@@ -41,7 +41,7 @@ export default function UploadDocumentsPage() {
 
                 console.log(formData);
                 try {
-                    const response = await fetch("http://localhost:2237/admin/vehicle-documents/upload", {
+                    const response = await fetch("https://web-production-7c280.up.railway.app/admin/vehicle-documents/upload", {
                         method: "POST",
                         body: formData, 
                     });

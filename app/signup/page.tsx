@@ -87,7 +87,7 @@ export default function SignupPage() {
 
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:2237/auth/signup",
+      const res = await fetch("https://web-production-7c280.up.railway.app/auth/signup",
         {
           method: "POST",
           headers: {

@@ -20,7 +20,7 @@ export default function AdminDashboard() {
       setLoading(true);
       setError("");
       try {
-        const response = await fetch("http://localhost:2237/vehicles/all");
+        const response = await fetch("https://web-production-7c280.up.railway.app/vehicles/all");
         const data = await response.json();
         console.log(data);
         setVehicles(data);

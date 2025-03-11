@@ -29,7 +29,7 @@ export default function UserDetails() {
     useEffect(() => {
         const fetchAllUsers = async () => {
             try {
-                const res = await fetch("http://localhost:2237/customers/all", {
+                const res = await fetch("https://web-production-7c280.up.railway.app/customers/all", {
                     method: "GET",
                 });
 

@@ -72,8 +72,8 @@ export default function LoginPage() {
 
     const endpoint =
       role === "admin"
-        ? "http://localhost:2237/auth/admin/login"
-        : "http://localhost:2237/auth/customer/login";
+        ? "https://web-production-7c280.up.railway.app/auth/admin/login"
+        : "https://web-production-7c280.up.railway.app/auth/customer/login";
 
     try {
       const res = await fetch(endpoint, {
@@ -138,7 +138,7 @@ export default function LoginPage() {
         <div className="space-y-4">
           {[
             { name: "email", icon: MailIcon, placeholder: "Email" },
-            { name: "password", icon: LockIcon, placeholder: "Password" },
+            { name: "password", icon: LockIcon, placeholder: "Password",isPassword:true },
           ].map((field, index) => (
             <motion.div
               key={field.name}

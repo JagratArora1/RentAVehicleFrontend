@@ -43,7 +43,7 @@ export default function SuccessPage() {
       console.log("Sending Booking Data:", bookingData);
 
       try {
-        const bookingResponse = await fetch("http://localhost:2237/bookings/create", {
+        const bookingResponse = await fetch("https://web-production-7c280.up.railway.app/bookings/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
