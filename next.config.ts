@@ -26,6 +26,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "rentvehicledoc.s3.ap-south-1.amazonaws.com", // Allows all S3 subdomains
       },
+      {
+        protocol: 'https',
+        hostname: 'rentavehicleimages.s3.ap-south-1.amazonaws.com',
+      },
     ],
   },
 };
