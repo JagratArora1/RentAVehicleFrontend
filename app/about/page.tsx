@@ -5,35 +5,35 @@ const founders = [
   {
     name: 'Jagrat',
     role: 'Frontend Developer',
-    image: '/founder1.jpg',
+    image: 'https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder4.jpg',
     description:
       'Jagrat crafts intuitive and visually appealing user interfaces, ensuring a seamless experience for every visitor. His attention to detail brings the platform to life.',
   },
   {
     name: 'Akshat',
-    role: 'DBA',
-    image: '/founder2.jpg',
+    role: 'Security Professional',
+    image: 'https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder1.jpg',
     description:
       'Akshat ensures data integrity and efficiency, optimizing databases for fast, reliable access while maintaining top-notch security.',
   },
   {
     name: 'Shambhavi',
     role: 'Backend Developer',
-    image: '/founder3.jpg',
+    image: 'https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder5.jpg',
     description:
       'Shambhavi powers the engine behind the scenes, building secure, efficient APIs and ensuring smooth server-side operations.',
   },
   {
     name: 'Durga',
     role: 'Backend Developer',
-    image: '/founder4.jpg',
+    image: 'https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder2.jpg',
     description:
       'Durga focuses on performance and reliability, developing scalable backend systems that handle complex workflows effortlessly.',
   },
   {
     name: 'Saumyajit',
     role: 'DBA',
-    image: '/founder5.jpg',
+    image: 'https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder3.jpg',
     description:
       'Saumyajit specializes in data organization and performance tuning, ensuring seamless interaction between the platform and its data.',
   },

@@ -158,11 +158,11 @@ const Home = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-4">
           {[
-            { name: "Jagrat", role: "Frontend Developer", image: "/founder1.jpg"},
-            { name: "Akshat", role: "DBA", image: "/founder2.jpg" },
-            { name: "Shambhavi", role: "Backend Developer", image: "/founder3.jpg" },
-            { name: "Durga", role: "Backend Developer", image: "/founder4.jpg" },
-            { name: "Saumyajit", role: "DBA", image: "/founder5.jpg" },
+            { name: "Jagrat", role: "Frontend Developer", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder4.jpg"},
+            { name: "Akshat", role: "Security Professional", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder1.jpg" },
+            { name: "Shambhavi", role: "Backend Developer", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder5.jpg" },
+            { name: "Durga", role: "Backend Developer", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder2.jpg" },
+            { name: "Saumyajit", role: "DBA", image: "https://rentavehicleimages.s3.ap-south-1.amazonaws.com/Founder3.jpg" },
           ].map((founder, index) => (
             <Card
               key={index}
